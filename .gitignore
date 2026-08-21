@@ -22,3 +22,6 @@ media/
 # Sistema
 .DS_Store
 Thumbs.db
+
+# Arquivos estáticos coletados
+staticfiles/
