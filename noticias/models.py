@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.db import models
 
 
@@ -50,6 +52,25 @@ class Noticia(models.Model):
     data_publicacao = models.DateTimeField(
         auto_now_add=True
     )
+
+
+    data_atualizacao = models.DateTimeField(
+        auto_now=True,
+        null=True
+    )
+
+
+    @property
+    def foi_atualizada(self):
+
+        if not self.data_atualizacao:
+            return False
+
+        return (
+            self.data_atualizacao
+            >
+            self.data_publicacao + timedelta(minutes=1)
+        )
 
 
     def __str__(self):

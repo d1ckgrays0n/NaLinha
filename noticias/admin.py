@@ -15,6 +15,7 @@ class NoticiaAdmin(admin.ModelAdmin):
         "categoria",
         "status",
         "data_publicacao",
+        "data_atualizacao",
     )
 
 
@@ -34,6 +35,7 @@ class NoticiaAdmin(admin.ModelAdmin):
 
     readonly_fields = (
         "data_publicacao",
+        "data_atualizacao",
     )
 
 
@@ -66,6 +68,7 @@ class NoticiaAdmin(admin.ModelAdmin):
             {
                 "fields": (
                     "data_publicacao",
+                    "data_atualizacao",
                 )
             },
         ),

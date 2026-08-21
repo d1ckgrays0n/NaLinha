@@ -92,12 +92,32 @@
     </h1>
 
 
-    <p class="data-noticia">
+    <div class="datas-noticia">
 
-        Publicado em
-        {{ noticia.data_publicacao|date:"d/m/Y H:i" }}
+        <p class="data-noticia">
 
-    </p>
+            Publicado em
+            {{ noticia.data_publicacao|date:"d/m/Y" }}
+            às
+            {{ noticia.data_publicacao|date:"H:i" }}
+
+        </p>
+
+
+        {% if noticia.foi_atualizada %}
+
+        <p class="data-atualizacao">
+
+            Atualizado em
+            {{ noticia.data_atualizacao|date:"d/m/Y" }}
+            às
+            {{ noticia.data_atualizacao|date:"H:i" }}
+
+        </p>
+
+        {% endif %}
+
+    </div>
 
 
     {% if noticia.imagem %}
