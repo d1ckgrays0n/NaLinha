@@ -1,0 +1,419 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>NaLinha</title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'noticias/estilo.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<header class="cabecalho">
+
+    <div class="logo">
+
+        <a href="{% url 'inicio' %}">
+
+            <h1>NaLinha</h1>
+
+            <span>
+                ESPORTES • NOTÍCIAS • CULTURA
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <div class="lado-direito-cabecalho">
+
+        <nav class="menu">
+
+            <a href="{% url 'inicio' %}">
+                Início
+            </a>
+
+            <a href="{% url 'categoria' 'Futebol' %}">
+                Futebol
+            </a>
+
+            <a href="{% url 'categoria' 'NBA' %}">
+                NBA
+            </a>
+
+            <a href="{% url 'categoria' 'Games' %}">
+                Games
+            </a>
+
+            <a href="{% url 'inicio' %}">
+                Últimas
+            </a>
+
+        </nav>
+
+
+        <form
+            class="busca"
+            method="get"
+            action="{% url 'inicio' %}"
+        >
+
+            <input
+                type="text"
+                name="q"
+                placeholder="Buscar notícias..."
+                value="{{ busca }}"
+            >
+
+            <button type="submit">
+                Buscar
+            </button>
+
+        </form>
+
+    </div>
+
+</header>
+
+
+<main>
+
+
+    {% if destaque %}
+
+    <section class="destaque">
+
+        <div class="conteudo-destaque">
+
+            <div class="categoria">
+                {{ destaque.categoria }}
+            </div>
+
+            <h2>
+                {{ destaque.titulo }}
+            </h2>
+
+            <p>
+                {{ destaque.resumo }}
+            </p>
+
+            <a
+                class="botao"
+                href="{% url 'detalhe_noticia' destaque.id %}"
+            >
+                Ler notícia
+            </a>
+
+        </div>
+
+
+        {% if destaque.imagem %}
+
+        <div class="area-imagem-destaque">
+
+            <img
+                src="{{ destaque.imagem.url }}"
+                alt="{{ destaque.titulo }}"
+            >
+
+        </div>
+
+        {% endif %}
+
+    </section>
+
+    {% endif %}
+
+
+    <section class="noticias">
+
+        <div class="titulo-secao">
+
+            <h2>
+                {{ titulo_secao }}
+            </h2>
+
+            {% if busca %}
+
+                <p>
+                    Matérias encontradas para sua pesquisa.
+                </p>
+
+            {% else %}
+
+                <p>
+                    Fique por dentro do que está acontecendo.
+                </p>
+
+            {% endif %}
+
+        </div>
+
+
+        <div class="grade-noticias">
+
+
+            {% for noticia in pagina %}
+
+
+            <article class="card">
+
+
+                {% if noticia.imagem %}
+
+                <img
+                    class="imagem-noticia"
+                    src="{{ noticia.imagem.url }}"
+                    alt="{{ noticia.titulo }}"
+                >
+
+                {% else %}
+
+                <div class="imagem-card">
+                    {{ noticia.categoria }}
+                </div>
+
+                {% endif %}
+
+
+                <div class="conteudo-card">
+
+                    <span class="tag">
+                        {{ noticia.categoria }}
+                    </span>
+
+                    <h3>
+                        {{ noticia.titulo }}
+                    </h3>
+
+                    <p>
+                        {{ noticia.resumo }}
+                    </p>
+
+                    <a href="{% url 'detalhe_noticia' noticia.id %}">
+                        Ler notícia
+                    </a>
+
+                </div>
+
+            </article>
+
+
+            {% empty %}
+
+
+            <div class="sem-noticias">
+
+                {% if busca %}
+
+                    <h3>
+                        Nenhuma notícia encontrada.
+                    </h3>
+
+                    <p>
+                        Tente pesquisar usando outro termo.
+                    </p>
+
+                {% else %}
+
+                    <h3>
+                        Nenhuma notícia publicada.
+                    </h3>
+
+                    <p>
+                        Novas matérias aparecerão aqui.
+                    </p>
+
+                {% endif %}
+
+            </div>
+
+
+            {% endfor %}
+
+
+        </div>
+
+
+        {% if pagina.paginator.num_pages > 1 %}
+
+        <div class="paginacao">
+
+
+            <div class="paginacao-lado">
+
+                {% if pagina.has_previous %}
+
+                    {% if busca %}
+
+                    <a
+                        class="pagina-botao"
+                        href="?q={{ busca|urlencode }}&page={{ pagina.previous_page_number }}"
+                    >
+                        ← Anterior
+                    </a>
+
+                    {% else %}
+
+                    <a
+                        class="pagina-botao"
+                        href="?page={{ pagina.previous_page_number }}"
+                    >
+                        ← Anterior
+                    </a>
+
+                    {% endif %}
+
+                {% endif %}
+
+            </div>
+
+
+            <div class="numeros-paginas">
+
+
+                {% for numero in pagina.paginator.page_range %}
+
+
+                    {% if pagina.number == numero %}
+
+                    <span class="pagina-atual">
+                        {{ numero }}
+                    </span>
+
+
+                    {% elif numero >= pagina.number|add:"-2" and numero <= pagina.number|add:"2" %}
+
+
+                        {% if busca %}
+
+                        <a
+                            href="?q={{ busca|urlencode }}&page={{ numero }}"
+                        >
+                            {{ numero }}
+                        </a>
+
+                        {% else %}
+
+                        <a href="?page={{ numero }}">
+                            {{ numero }}
+                        </a>
+
+                        {% endif %}
+
+
+                    {% endif %}
+
+
+                {% endfor %}
+
+
+            </div>
+
+
+            <div class="paginacao-lado paginacao-direita">
+
+                {% if pagina.has_next %}
+
+                    {% if busca %}
+
+                    <a
+                        class="pagina-botao"
+                        href="?q={{ busca|urlencode }}&page={{ pagina.next_page_number }}"
+                    >
+                        Próxima →
+                    </a>
+
+                    {% else %}
+
+                    <a
+                        class="pagina-botao"
+                        href="?page={{ pagina.next_page_number }}"
+                    >
+                        Próxima →
+                    </a>
+
+                    {% endif %}
+
+                {% endif %}
+
+            </div>
+
+
+        </div>
+
+
+        <p class="informacao-pagina">
+
+            Página
+            {{ pagina.number }}
+            de
+            {{ pagina.paginator.num_pages }}
+
+        </p>
+
+        {% endif %}
+
+
+    </section>
+
+
+    <section class="sobre">
+
+        <h2>
+            Sobre o NaLinha
+        </h2>
+
+        <p>
+            O NaLinha é um projeto independente focado
+            em esporte, games e informação.
+
+            Um espaço para acompanhar notícias,
+            histórias e tudo que acontece dentro
+            e fora das competições.
+        </p>
+
+    </section>
+
+
+</main>
+
+
+<footer>
+
+    <h2>
+        NaLinha
+    </h2>
+
+    <p>
+        Esporte, notícia e cultura em um só lugar.
+    </p>
+
+    <span>
+        © 2026 NaLinha
+    </span>
+
+</footer>
+
+
+</body>
+
+</html>

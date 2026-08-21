@@ -1,0 +1,146 @@
+{% load static %}
+
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {{ noticia.titulo }} | NaLinha
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="{% static 'noticias/estilo.css' %}"
+    >
+
+</head>
+
+
+<body>
+
+
+<header class="cabecalho">
+
+    <div class="logo">
+
+        <a href="{% url 'inicio' %}">
+
+            <h1>NaLinha</h1>
+
+            <span>
+                ESPORTES • NOTÍCIAS • CULTURA
+            </span>
+
+        </a>
+
+    </div>
+
+
+    <nav class="menu">
+
+        <a href="{% url 'inicio' %}">
+            Início
+        </a>
+
+        <a href="{% url 'categoria' 'Futebol' %}">
+            Futebol
+        </a>
+
+        <a href="{% url 'categoria' 'NBA' %}">
+            NBA
+        </a>
+
+        <a href="{% url 'categoria' 'Games' %}">
+            Games
+        </a>
+
+        <a href="{% url 'inicio' %}">
+            Últimas
+        </a>
+
+    </nav>
+
+</header>
+
+
+<main class="pagina-noticia">
+
+    <a
+        class="voltar"
+        href="{% url 'inicio' %}"
+    >
+        ← Voltar
+    </a>
+
+
+    <span class="tag">
+        {{ noticia.categoria }}
+    </span>
+
+
+    <h1>
+        {{ noticia.titulo }}
+    </h1>
+
+
+    <p class="data-noticia">
+
+        Publicado em
+        {{ noticia.data_publicacao|date:"d/m/Y H:i" }}
+
+    </p>
+
+
+    {% if noticia.imagem %}
+
+    <img
+        class="imagem-detalhe"
+        src="{{ noticia.imagem.url }}"
+        alt="{{ noticia.titulo }}"
+    >
+
+    {% endif %}
+
+
+    <p class="resumo-noticia">
+        {{ noticia.resumo }}
+    </p>
+
+
+    <div class="texto-noticia">
+        {{ noticia.texto|linebreaks }}
+    </div>
+
+
+</main>
+
+
+<footer>
+
+    <h2>
+        NaLinha
+    </h2>
+
+    <p>
+        Esporte, notícia e cultura em um só lugar.
+    </p>
+
+    <span>
+        © 2026 NaLinha
+    </span>
+
+</footer>
+
+
+</body>
+
+</html>
